@@ -1,0 +1,4 @@
+config SHIELD_CASTOR_LEFT
+	def_bool $(shields_list_contains,castor_left)
+config SHIELD_CASTOR_RIGHT
+	def_bool $(shields_list_contains,castor_right)

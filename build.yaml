@@ -1,0 +1,2 @@
+board: [ "nice_nano_v2" ]
+shield: [ "castor_left", "castor_right", "settings_reset" ]
