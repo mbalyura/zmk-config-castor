@@ -74,9 +74,30 @@
 };
 
 / {
-combos { compatible = "zmk,combos"; };
+	combos {
+		compatible = "zmk,combos";
+
+		cmb_bspc {
+			bindings = <&kp BACKSPACE>;
+			key-positions = <0 1>;
+		};
+
+		cmb_del {
+			bindings = <&kp DELETE>;
+			key-positions = <1 2>;
+		};
+	};
 
 	behaviors {
+		ght: generic_hold_tap {
+			compatible = "zmk,behavior-hold-tap";
+			#binding-cells = <2>;
+			flavor = "tap-preferred";
+			tapping-term-ms = <200>;
+			bindings = <&kp>, <&kp>;
+		};
+
+		// home row mods
 		hml: home_row_mod_left {
 			compatible = "zmk,behavior-hold-tap";
 			label = "HRM Left";
@@ -129,20 +150,20 @@ combos { compatible = "zmk,combos"; };
           bindings = <
                               &kp W        &kp F            &kp P              &kp G             /* | */        &kp J          &kp L              &kp U            &kp Y
 &kp Q          &hml LGUI A    &hml LALT R  &hml LCTRL S     &hml LSHIFT T      &kp D             /* | */        &kp H          &hmr LSHIFT N      &hmr LCTRL E     &hmr LALT I       &hmr LGUI O         &kp SEMI
-&kp LBRC       &kp Z          &kp X        &kp C            &kp V              &kp B             /* | */        &kp K          &kp M              &kp COMMA        &kp DOT           &kp SLASH           &kp RBRC
+&kp LBKT       &kp Z          &kp X        &kp C            &kp V              &kp B             /* | */        &kp K          &kp M              &kp COMMA        &kp DOT           &kp SLASH           &mt RALT SQT
                                           /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-                                           &kp BSPC          &lt NAV ESC       &kp SPACE         /* | */        &lt NUM TAB    &lt SYM ENTER      &kp DEL
+                                           &kp BSPC         &lt NAV ESC        &lt NAV SPACE     /* | */        &lt NUM TAB    &lt SYM ENTER      &kp DEL
             >;
             sensor-bindings = <&scroll_encoder>;
         };
 
           navigation_layer {
           bindings = <
-                              &kp LC(W)     &kp LC(F)        &kp LC(P)          &trans             /* | */        &kp PG_UP      &kp HOME           &kp UP          &kp END
-&kp LC(Q)      &kp LGUI       &sk LALT      &sk LCTRL        &sk LSHIFT         &kp LC(D)          /* | */        &kp PG_DN      &kp LEFT           &kp DOWN        &kp RIGHT          &kp LC(O)         &kp LC(SEMI)
-&trans         &kp LC(Z)      &kp LC(X)     &kp LC(C)        &kp LC(V)          &trans             /* | */        &kp LC(K)      &kt LC(M)          &kp K_CONTEXT_MENU &kp LC(PERIOD)  &kp LC(SLASH)     &trans
+                              &kp LC(W)     &kp LC(F)        &kp LC(P)          &trans           /* | */        &kp PG_UP      &kp HOME           &kp UP          &kp END
+&kp LC(Q)      &kp LGUI       &sk LALT      &sk LCTRL        &sk LSHIFT         &kp LC(D)        /* | */        &kp PG_DN      &kp LEFT           &kp DOWN        &kp RIGHT          &kp LC(O)         &kp LC(SEMI)
+&trans         &kp LC(Z)      &kp LC(X)     &ght LS(LC(C)) LC(C) &ght LS(LC(V)) LC(V) &trans     /* | */        &kp LC(K)      &kt LC(M)          &kp K_CONTEXT_MENU &kp LC(PERIOD)  &kp LC(SLASH)     &trans
                                            /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-                                            &trans           &trans             &trans             /* | */        &trans         &trans             &trans
+                                            &trans           &trans             &trans           /* | */        &trans         &trans             &trans
             >;
             sensor-bindings = <&scroll_encoder>;
         };
@@ -164,18 +185,18 @@ combos { compatible = "zmk,combos"; };
 &kp F1        &kp F5        &kp F6        &kp F7          &kp F8              &kp F23            /* | */        &kp PLUS       &kp N4            &kp N5            &kp N6            &kp N0              &kp STAR
 &trans        &kp F9        &kp F10       &kp F11         &kp F12             &kp F24            /* | */        &kp EQUAL      &kp N1            &kp N2            &kp N3            &kp SLASH           &trans
                                           /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-                                          &trans           &trans             &trans             /* | */        &trans         &trans             &trans
+                                          &trans           &trans             &trans             /* | */        &trans         &trans            &trans
             >;
             sensor-bindings = <&scroll_encoder>;
         };
 
           system-fun_layer {
           bindings = <
-                               &bt BT_SEL 0   &bt BT_SEL 1    &bt BT_SEL 2    &none              /* | */        &kp K_VOL_UP    &none             &kp F20 /* mic */  &none
-&bt BT_CLR    &bt BT_CLR_ALL   &none          &none           &none           &ext_power EP_TOG  /* | */        &kp K_MUTE      &kp K_PREV        &kp K_PLAY_PAUSE   &kp K_NEXT       &none              &none
-&none         &sys_reset       &bootloader    &soft_off       &out OUT_USB    &out OUT_BLE       /* | */        &kp K_VOL_DN    &none             &none              &bootloader      &sys_reset         &none
-                                             /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-                                              &none           &none           &none              /* | */        &none          &none              &none
+                               &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2    &none                 /* | */        &kp K_VOL_UP    &none             &kp F20 /* mic */  U_TOG_TP_SET
+&bt BT_CLR    &bt BT_CLR_ALL   &none         &none         &none           &ext_power EP_TOG     /* | */        &kp K_MUTE      &kp K_PREV        &kp K_PLAY_PAUSE   &kp K_NEXT       &none              &none
+&none         &sys_reset       &bootloader   &soft_off     &out OUT_USB    &out OUT_BLE          /* | */        &kp K_VOL_DN    &none             &none              &bootloader      &sys_reset         &none
+                                            /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+                                             &none         &none           &none                 /* | */        &none           &none             &none
             >;
             sensor-bindings = <&inc_dec_kp C_VOLUME_UP C_VOL_DN>;
         };
@@ -183,13 +204,14 @@ combos { compatible = "zmk,combos"; };
 
 #ifdef HAS_MOUSE_KEYS
 
-		mouse_keys_layer {
-			display-name = "MouseKeys";
+		mouse_keys {
+			display-name = "Mouse Keys";
 			bindings = <
-			U_TOG_TP_SET             U_TOG_TP_SET             &none                    &mmv MOVE_UP             &msc SCRL_UP             &none                         &none                    &msc SCRL_UP             &mmv MOVE_UP             &none                    U_TOG_TP_SET              U_TOG_TP_SET
-			&trans                   &none                    &mmv MOVE_LEFT           &mmv MOVE_DOWN           &mmv MOVE_RIGHT          &none                         &none                    &mmv MOVE_LEFT           &mmv MOVE_DOWN           &mmv MOVE_RIGHT          &none                     &trans
-			&trans                   &none                    &none                    &none                    &msc SCRL_DOWN           &none                         &none                    &msc SCRL_DOWN           &none                    &none                    &trans                    &trans
-			                                                                           &mkp MCLK                &mkp LCLK                &mkp RCLK                     &mkp MCLK                &mkp LCLK                &mkp RCLK
+														&none          &mmv MOVE_UP    &msc SCRL_UP    &none                 /* | */        &none            &msc SCRL_UP     &mmv MOVE_UP      &none
+&none         &none         &mmv MOVE_LEFT &mmv MOVE_DOWN  &mmv MOVE_RIGHT &none                 /* | */        &none            &mmv MOVE_LEFT   &mmv MOVE_DOWN    &mmv MOVE_RIGHT   &none        &none
+&none         &none         &none          &none           &msc SCRL_DOWN  &none                 /* | */        &none            &msc SCRL_DOWN   &none             &none             &none        &none
+                                           /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+                                           &mkp MCLK       &mkp RCLK       &mkp LCLK             /* | */        &mkp LCLK        &mkp RCLK        &mkp MCLK
 			>;
 		};
 
@@ -199,24 +221,26 @@ combos { compatible = "zmk,combos"; };
 
 		// Automatically activated when the mouse or trackpoint moves.
 		// Configured in `include/mouse_tp.dtsi`.
-		tp_layer {
-			display-name = "TP";
-			bindings = <
-			U_TOG_TP_SET             U_TOG_TP_SET             &trans                   &trans                   &msc SCRL_UP             &trans                        &trans                   &trans                   &trans                   &trans                   U_TOG_TP_SET              U_TOG_TP_SET
-			&trans                   &trans                   &trans                   &trans                   &trans                   &trans                        &trans                   &trans                   &trans                   &trans                   &trans                    &trans
-			&trans                   &trans                   &trans                   &trans                   &msc SCRL_DOWN           &trans                        &trans                   &trans                   &trans                   &trans                   &trans                    &trans
-                                                                                          &mkp MCLK                &mkp LCLK                &mkp RCLK                     &mkp MCLK                &mkp LCLK                &mkp RCLK
+					auto_tp_layer {
+					display-name = "Auto TP Layer";
+					bindings = <
+			        							&trans        &trans          &msc SCRL_UP    &trans                 /* | */        &trans           &trans         	&trans 			      &trans
+&trans        &trans        &trans        &trans          &msc SCRL_DOWN  &trans                 /* | */        &trans           &trans         	&trans 			      &trans            &trans        &trans
+&trans        &trans        &trans        &trans          &trans          &trans                 /* | */        &trans           &trans         	&trans 			      &trans            &trans        &trans
+                                          /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+                                          &mkp MCLK       &mkp RCLK       &mkp LCLK              /* | */        &mkp LCLK        &mkp RCLK        &mkp MCLK
 			>;
 		};
 
 		// You can find the defines for the actual key press behaviors in `include/mouse_tp.dtsi`.
-		tp_settings_layer {
-			display-name = "TP Settings";
-			bindings = <
-			U_TOG_TP_SET             U_TOG_TP_SET             &none                    U_MSS_TP_S_D             U_MSS_TP_S_I             U_MSS_TP_PT_I                 U_MSS_TP_PT_I            U_MSS_TP_S_D             U_MSS_TP_S_I             &none                    U_TOG_TP_SET              U_TOG_TP_SET
-			U_MSS_RESET              U_MSS_RESET              &none                    U_MSS_TP_NI_D            U_MSS_TP_NI_I            U_MSS_TP_PT_D                 U_MSS_TP_PT_D            U_MSS_TP_NI_D            U_MSS_TP_NI_I            &none                    U_MSS_RESET               U_MSS_RESET
-			U_MSS_LOG                U_MSS_LOG                &none                    U_MSS_TP_V6_D            U_MSS_TP_V6_I            &none                         &none                    U_MSS_TP_V6_D            U_MSS_TP_V6_I            &none                    U_MSS_LOG                 U_MSS_LOG
-			                                                                           &trans                   &mkp LCLK                &mkp RCLK                     &none                    &mkp LCLK                &mkp RCLK
+					trackpoint_settings {
+					display-name = "TP Settings";
+					bindings = <  /*  max speed     sensitivity     tap sensitivity  negative inertia      */
+			                      U_MSS_TP_V6_I	U_MSS_TP_S_I    U_MSS_TP_PT_I    U_MSS_TP_NI_I	       /* | */        &none            &none            &none             U_TOG_TP_SET
+&none         &none         U_MSS_TP_V6_D U_MSS_TP_S_D    U_MSS_TP_PT_D    U_MSS_TP_NI_D	       /* | */        &none            &none            &none             &none             &none       &none
+U_MSS_LOG     &none         &none         &none           &none            &none                 /* | */        &none            &none            &none             &none             &none       U_MSS_RESET
+                                          /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+                                          &mkp MCLK       &mkp RCLK       &mkp LCLK              /* | */        &mkp LCLK        &mkp RCLK        &mkp MCLK
 			>;
 		};
 

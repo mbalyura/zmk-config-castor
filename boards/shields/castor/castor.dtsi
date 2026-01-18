@@ -11,7 +11,7 @@
 		wakeup-source;
 
 		input-gpios
-		//left side
+		//left side of controller board
 		// = <&gpio0 6  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>// D1   P0.06  // left - encoder A  |  right - trackpoint SDA
 		// , <&gpio0 8  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>// D0   P0.08  // left - encoder B  |  right - trackpoint SCL
 		= <&gpio0 17 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>// D2   P0.17
@@ -23,7 +23,7 @@
 		, <&gpio1 4  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>// D8   P1.04
 		, <&gpio1 6  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>// D9   P1.06
 
-		//right side
+		//right side of controller board
 		, <&gpio0 31 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>// D21  P0.31
 		, <&gpio0 29 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>// D20  P0.29
 		, <&gpio0 2  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>// D19  P0.02
@@ -33,7 +33,7 @@
 		, <&gpio0 10 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>// D16  P0.10
 		, <&gpio0 9  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>// D10  P0.09
 
-		//additional pins
+		//additional pins in center
 		, <&gpio1 1  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>//      P1.01
 		, <&gpio1 2  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>//      P1.02
 		, <&gpio1 7  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>//      P1.07
@@ -57,7 +57,7 @@ RC(0,10)  RC(0,11)  RC(0,12)  RC(0,13)  RC(0,14)  RC(0,15)				RC(0,29)  RC(0,30)
 		// resolution = <4>;
 		a-gpios = <&gpio0 6 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
 		b-gpios = <&gpio0 8 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
-		steps = <24>;
+		steps = <48>;
 		status = "disabled";
 	};
 
