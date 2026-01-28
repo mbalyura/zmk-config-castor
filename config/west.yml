@@ -10,8 +10,8 @@ manifest:
       url-base: https://github.com/dhruvinsh
   projects:
     - name: zmk
-      remote: infused-kim
-      revision: pr-testing/mouse_ps2_module_base
+      remote: zmkfirmware
+      revision: main
       import: app/west.yml
     # Module for PS/2 mouse & TP driver
     # - name: kb_zmk_ps2_mouse_trackpoint_driver
