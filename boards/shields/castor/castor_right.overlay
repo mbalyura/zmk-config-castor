@@ -426,6 +426,8 @@
 // not have the mouse or TP
 #define MOUSE_PS2_DT_PRESENT
 
+/include/ "mouse_listener_choice.dtsi"
+
 &pinctrl {
 	// This pinctrl state is used for receiving
 	// For `UART_TX`, set an unused and unexposed pin
@@ -514,6 +516,7 @@
 #endif
     };
 
+#ifndef USE_GENERIC_MOUSE_LISTENER
     mouse_ps2_input_listener: mouse_ps2_input_listener {
         compatible = "zmk,input-listener-ps2";
         status = "disabled";
@@ -524,4 +527,13 @@
 		// are adjusted in...
 		// zmk-config/config/includes/mouse_tp.dtsi
     };
+#endif
+
+#ifdef USE_GENERIC_MOUSE_LISTENER
+    generic_mouse_listener: generic_mouse_listener {
+        compatible = "zmk,input-listener";
+        status = "disabled";
+        device = <&mouse_ps2>;
+    };
+#endif
 };
