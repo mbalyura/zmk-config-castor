@@ -1,4 +1,12 @@
 #include "castor.dtsi"
+#include "../../../config/include/mouse_listener_choice.dtsi"
+
+#ifdef USE_GENERIC_MOUSE_LISTENER
+#include <input/processors.dtsi>
+#include <dt-bindings/zmk/input_transform.h>
+#include <zephyr/dt-bindings/input/input-event-codes.h>
+#endif
+
 
 &default_transform {
 	col-offset = <19>;
@@ -426,7 +434,7 @@
 // not have the mouse or TP
 #define MOUSE_PS2_DT_PRESENT
 
-#include "../../../config/include/mouse_listener_choice.dtsi"
+
 
 &pinctrl {
 	// This pinctrl state is used for receiving
@@ -530,10 +538,21 @@
 #endif
 
 #ifdef USE_GENERIC_MOUSE_LISTENER
+
     generic_mouse_listener: generic_mouse_listener {
         compatible = "zmk,input-listener";
         status = "disabled";
         device = <&mouse_ps2>;
+        input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP)>,
+            <&zip_xy_transform (INPUT_TRANSFORM_X_INVERT)>,
+            <&zip_xy_transform (INPUT_TRANSFORM_Y_INVERT)>;
+        scroller {
+            layers = <7>;
+            input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP)>,
+                <&zip_xy_transform (INPUT_TRANSFORM_X_INVERT)>,
+                <&zip_xy_scaler 1 4>,
+                <&zip_xy_to_scroll_mapper>;
+        };
     };
 #endif
 };
