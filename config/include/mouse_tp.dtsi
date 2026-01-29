@@ -71,9 +71,9 @@
   #ifdef MOUSE_PS2_DT_PRESENT
 
    /*
-    * Input Listener Config
+    * Input Listener Config (driver's zmk,input-listener-ps2 only)
     */
-
+#ifndef USE_GENERIC_MOUSE_LISTENER
     &mouse_ps2_input_listener {
 
       // Adjust pointing device axes.
@@ -96,6 +96,7 @@
       // the layer (Default: 250)
       layer-toggle-timeout-ms = <250>;
     };
+#endif
 
 
    /*
@@ -173,9 +174,15 @@
       status = "okay";
     };
 
+#ifndef USE_GENERIC_MOUSE_LISTENER
     &mouse_ps2_input_listener {
       status = "okay";
     };
+#else
+    &generic_mouse_listener {
+      status = "okay";
+    };
+#endif
 
     #ifdef MOUSE_PS2_DRIVER_UART
 

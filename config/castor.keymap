@@ -41,6 +41,7 @@
 #endif  // HAS_MOUSE_KEYS
 
 #ifdef HAS_MOUSE_TP
+#include "include/mouse_listener_choice.dtsi"
 #include "include/mouse_tp.dtsi"
 #endif  // HAS_MOUSE_TP
 
