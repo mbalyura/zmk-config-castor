@@ -426,7 +426,7 @@
 // not have the mouse or TP
 #define MOUSE_PS2_DT_PRESENT
 
-/include/ "mouse_listener_choice.dtsi"
+#include "../../../config/include/mouse_listener_choice.dtsi"
 
 &pinctrl {
 	// This pinctrl state is used for receiving
