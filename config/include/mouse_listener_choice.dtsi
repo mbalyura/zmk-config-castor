@@ -3,4 +3,4 @@
  * - Define USE_GENERIC_MOUSE_LISTENER to use ZMK generic listener (builds with ZMK main).
  * - Undefine/comment out to use driver's zmk,input-listener-ps2 (needs ZMK fork with mouse PR).
  */
-#define USE_GENERIC_MOUSE_LISTENER
+// #define USE_GENERIC_MOUSE_LISTENER
