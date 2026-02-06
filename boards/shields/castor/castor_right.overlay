@@ -81,6 +81,8 @@
 // You don't need this if you are not using a trackpoint or if you have a
 // trackpoint reset circuit.
 //
+// ----Castor has a reset circuit, so we don't need to use a pin for reset.----
+//
 // It's ok to use a low-frequency pin for this.
 // #define MOUSE_PS2_PIN_RST_PRO_MICRO <&pro_micro 9 GPIO_ACTIVE_HIGH>
 
@@ -536,23 +538,33 @@
 		// zmk-config/config/includes/mouse_tp.dtsi
     };
 #endif
+};
 
 #ifdef USE_GENERIC_MOUSE_LISTENER
-
+/ {
     generic_mouse_listener: generic_mouse_listener {
         compatible = "zmk,input-listener";
         status = "disabled";
         device = <&mouse_ps2>;
+
         input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP)>,
-            <&zip_xy_transform (INPUT_TRANSFORM_X_INVERT)>,
-            <&zip_xy_transform (INPUT_TRANSFORM_Y_INVERT)>;
+                           <&zip_xy_scaler 0 1>;
+
         scroller {
             layers = <7>;
+            //process-next;
             input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP)>,
-                <&zip_xy_transform (INPUT_TRANSFORM_X_INVERT)>,
-                <&zip_xy_scaler 1 4>,
-                <&zip_xy_to_scroll_mapper>;
+                               <&zip_xy_transform (INPUT_TRANSFORM_Y_INVERT)>,
+                               <&zip_xy_scaler 1 8>,
+                               <&zip_xy_to_scroll_mapper>;
+        };
+        mouse {
+            layers = <6>;
+            input-processors =
+                <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP)>
+                //, <&zip_temp_layer 9 500>
+                ;
         };
     };
-#endif
 };
+#endif
