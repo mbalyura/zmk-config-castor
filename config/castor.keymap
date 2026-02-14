@@ -18,9 +18,10 @@
 #define SYM 2
 #define NUM 3
 #define SYS 4
-#define MOUSE_KEYS 5
-#define MOUSE_TP 6
-#define MOUSE_TP_SET 7
+#define SWP 5
+#define MOUSE_KEYS 6
+#define MOUSE_TP 7
+#define MOUSE_TP_SET 8
 
 /*
 * Defines to enable/disable features
@@ -71,6 +72,10 @@
 			if-layers = <NAV SYM>;
 			then-layer = <SYS>;
 		};
+		sys_layer2 {
+			if-layers = <NAV NUM>;
+			then-layer = <SYS>;
+		};
 	};
 };
 
@@ -82,10 +87,37 @@
 			bindings = <&kp BACKSPACE>;
 			key-positions = <0 1>;
 		};
-
 		cmb_del {
 			bindings = <&kp DELETE>;
 			key-positions = <1 2>;
+		};
+		cmb_undo {
+			bindings = <&kp LC(Z)>;
+			key-positions = <21 22>;
+		};
+		cmb_copy {
+			bindings = <&kp LC(C)>;
+			key-positions = <22 23>;
+		};
+		cmb_paste {
+			bindings = <&kp LC(V)>;
+			key-positions = <23 24>;
+		};
+		cmb_enter {
+			bindings = <&kp ENTER>;
+			key-positions = <24 25>;
+		};
+		cmb_caps {
+			bindings = <&caps_word>;
+			key-positions = <27 29>;
+		};
+		cmb_lang {
+			bindings = <&kp SCROLLLOCK>;
+			key-positions = <5 7>;
+		};
+		cmb_shcha {
+			bindings = <&kp RA(U)>;
+			key-positions = <6 7>;
 		};
 	};
 
@@ -104,7 +136,7 @@
 			label = "HRM Left";
 			#binding-cells = <2>;
 			flavor = "balanced";//produces a "hold" if another key is both pressed and released within the tapping-term.
-			require-prior-idle-ms = <150>;// immediately resolves a HRM as "tap" when it is pressed shortly after another key has been tapped.
+			require-prior-idle-ms = <150>;// immediately resolves a HRM as "tap" when it is pressed shortly after another key has been tapped. As a rule of thumb, you want to set it to at least 10500/x where x is your (relaxed) WPM for English prose
 			tapping-term-ms = <280>;//how long a key must be pressed to trigger the "hold" behavior
 			quick-tap-ms = <175>;//If you press a tapped hold-tap again within quick-tap-ms milliseconds of the first press, it will always trigger the tap behavior.
 			bindings = <&kp>, <&kp>;
@@ -123,20 +155,31 @@
 			hold-trigger-key-positions = <LEFT_KEYS LEFT_THUMBS>;// List of keys on the left side of the keyboard
 			hold-trigger-on-release;
 		};
-		// swapper: swapper {
-		// 	compatible = "zmk,behavior-tri-state";
-		// 	label = "SWAPPER";
-		// 	#binding-cells = <0>;
-		// 	bindings = <&kt LALT>, <&kp TAB>, <&kt LALT>;
-		// 	ignored-key-positions = <7 13 16 17 18>;
-		// };
-		// tabber: tabber {
-		// 	compatible = "zmk,behavior-tri-state";
-		// 	label = "TABBER";
-		// 	#binding-cells = <0>;
-		// 	bindings = <&kt LCTRL>, <&kp TAB>, <&kt LCTRL>;
-		// 	ignored-key-positions = <13>;
-		// };
+
+		// one hand alt-tab / ctrl-tab
+		tabber: tabber {
+			compatible = "zmk,behavior-tri-state";
+			label = "TABBER";
+			#binding-cells = <0>;
+			bindings = <&kt LCTRL>, <&kp TAB>, <&kt LCTRL>;
+			ignored-key-positions = <1>; // shift-tab
+		};
+		switcher: switcher {
+			compatible = "zmk,behavior-tri-state";
+			label = "SWITCHER";
+			#binding-cells = <0>;
+			bindings = <&kt LALT>, <&kp GRAVE>, <&kt LALT>;
+			ignored-key-positions = <11>; // shift-grave
+		};
+		swapper: swapper {
+			compatible = "zmk,behavior-tri-state";
+			label = "SWAPPER";
+			#binding-cells = <0>;
+			bindings = <&kt LALT>, <&kp TAB>, <&kt LALT>;
+			ignored-key-positions = <23>; // shift-tab
+		};
+
+		//mouse scroll
 		scroll_encoder: scroll_encoder {
 			compatible = "zmk,behavior-sensor-rotate";
 			#sensor-binding-cells = <0>;
@@ -147,51 +190,51 @@
 
 	keymap {
 		compatible = "zmk,keymap";
-          default_layer {
+          default_layer { //0
           bindings = <
                               &kp W        &kp F            &kp P              &kp G             /* | */        &kp J          &kp L              &kp U            &kp Y
 &kp Q          &hml LGUI A    &hml LALT R  &hml LCTRL S     &hml LSHIFT T      &kp D             /* | */        &kp H          &hmr LSHIFT N      &hmr LCTRL E     &hmr LALT I       &hmr LGUI O         &kp SEMI
-&kp LBKT       &kp Z          &kp X        &kp C            &kp V              &kp B             /* | */        &kp K          &kp M              &kp COMMA        &kp DOT           &kp SLASH           &mt RALT SQT
+&kp LBKT       &lt SWP Z      &kp X        &kp C            &kp V              &kp B             /* | */        &kp K          &kp M              &kp COMMA        &kp DOT           &kp SLASH           &kp SQT
                                           /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-                                           &kp BSPC         &lt NAV ESC        &lt NAV SPACE     /* | */        &lt NUM TAB    &lt SYM ENTER      &kp DEL
+                                           &kp BSPC         &lt NAV ESC 	     &lt NAV SPACE     /* | */        &lt NUM TAB    &lt SYM ENTER      &mt RALT DEL
             >;
             sensor-bindings = <&scroll_encoder>;
         };
 
-          navigation_layer {
+          navigation_layer { //1
           bindings = <
-                              &kp LC(W)     &kp LC(F)        &kp LC(P)          &trans           /* | */        &kp PG_UP      &kp HOME           &kp UP          &kp END
+                              &kp LC(W)     &kp LC(F)        &kp LC(P)          &kp LC(G)        /* | */        &kp PG_UP      &kp HOME           &kp UP          &kp END
 &kp LC(Q)      &kp LGUI       &sk LALT      &sk LCTRL        &sk LSHIFT         &kp LC(D)        /* | */        &kp PG_DN      &kp LEFT           &kp DOWN        &kp RIGHT          &kp LC(O)         &kp LC(SEMI)
-&trans         &kp LC(Z)      &kp LC(X)     &ght LS(LC(C)) LC(C) &ght LS(LC(V)) LC(V) &trans     /* | */        &kp LC(K)      &kt LC(M)          &kp K_CONTEXT_MENU &kp LC(PERIOD)  &kp LC(SLASH)     &trans
+&trans         &kp LC(Z)      &kp LC(X)     &ght LS(LC(C)) LC(C) &ght LS(LC(V)) LC(V) &kp LC(B)  /* | */        &kp LS(LC(K))  &kt LC(M)          &kp K_CONTEXT_MENU &kp LC(PERIOD)  &kp LC(SLASH)     &trans
                                            /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
                                             &trans           &trans             &trans           /* | */        &trans         &trans             &trans
             >;
             sensor-bindings = <&scroll_encoder>;
         };
 
-          symbols_layer {
+          symbols_layer { //2
           bindings = <
-                            &kp AT        &kp HASH         &kp DOLLAR         &kp PERCENT        /* | */        &kp CARET      &kp AMPERSAND      &kp STAR          &kp LPAR
-&kp EXCL      &kp EQUAL     &kp PLUS      &kp MINUS        &kp UNDER          &kp LBKT           /* | */        &kp RBKT       &sk LSHIFT         &sk LCTRL         &sk LALT          &kp SQT            &kp RPAR
-&trans        &kp PIPE      &kp GRAVE     &caps_word       &kp LPAR           &kp LBRC           /* | */        &kp RBRC       &kp RPAR           &trans            &kp TILDE         &kp BACKSLASH      &trans
-                                          /* - - - - - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-                                          &trans           &trans             &trans             /* | */        &trans         &trans             &trans
+                            &kp AT          &kp HASH         &kp DOLLAR         &kp PERCENT      /* | */        &kp CARET      &kp AMPERSAND      &kp STAR          &kp LPAR
+&kp EXCL      &kp EQUAL     &kp PLUS        &kp MINUS        &kp UNDER          &kp LBKT         /* | */        &kp RBKT       &sk LSHIFT         &sk LCTRL         &sk LALT          &kp SQT            &kp RPAR
+&trans        &kp PIPE      &kp GRAVE       &caps_word       &kp LPAR           &kp LBRC         /* | */        &kp RBRC       &kp RPAR           &trans            &kp TILDE         &kp BACKSLASH      &trans
+                                            /* - - - - - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+                                            &trans           &trans             &trans           /* | */        &trans         &trans             &trans
             >;
             sensor-bindings = <&scroll_encoder>;
         };
 
-          numbers-fn_layer {
+          numbers-fn_layer { //3
           bindings = <
-                            &kp F2        &kp F3          &kp F4              &kp F22            /* | */        &kp MINUS      &kp N7            &kp N8            &kp N9
-&kp F1        &kp F5        &kp F6        &kp F7          &kp F8              &kp F23            /* | */        &kp PLUS       &kp N4            &kp N5            &kp N6            &kp N0              &kp STAR
-&trans        &kp F9        &kp F10       &kp F11         &kp F12             &kp F24            /* | */        &kp EQUAL      &kp N1            &kp N2            &kp N3            &kp SLASH           &trans
-                                          /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-                                          &trans           &trans             &trans             /* | */        &trans         &trans            &trans
+                            &kp F2          &kp F3          &kp F4              &kp F22          /* | */        &kp MINUS      &kp N7            &kp N8            &kp N9
+&kp F1        &kp F5        &kp F6          &kp F7          &kp F8              &kp F23          /* | */        &kp PLUS       &kp N4            &kp N5            &kp N6            &kp N0              &kp STAR
+&trans        &kp F9        &kp F10         &kp F11         &kp F12             &kp F24          /* | */        &kp EQUAL      &kp N1            &kp N2            &kp N3            &kp SLASH           &trans
+                                            /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+                                            &trans           &trans             &trans           /* | */        &trans         &trans            &trans
             >;
             sensor-bindings = <&scroll_encoder>;
         };
 
-          system-fun_layer {
+          system-fun_layer { //4
           bindings = <
                                &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2    &none                 /* | */        &kp K_VOL_UP    &none             &kp F20 /* mic */  U_TOG_TP_SET
 &bt BT_CLR    &bt BT_CLR_ALL   &none         &none         &none           &ext_power EP_TOG     /* | */        &kp K_MUTE      &kp K_PREV        &kp K_PLAY_PAUSE   &kp K_NEXT       &none              &none
@@ -202,10 +245,19 @@
             sensor-bindings = <&inc_dec_kp C_VOLUME_UP C_VOL_DN>;
         };
 
+					swapper_layer { //5
+					bindings = <
+			        							&none         &kp LS(TAB)     &tabber         &none                  /* | */        &none            &none          	&none  			      &none
+&none         &none         &none         &kp LS(GRAVE)   &switcher       &none                  /* | */        &none            &none          	&none  			      &none             &none         &none
+&none         &none         &none         &kp LS(TAB)     &swapper        &none                  /* | */        &none            &none          	&none  			      &none             &none         &none
+                                          /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+                                          &none           &none           &none                  /* | */        &none            &none            &none
+			>;
+		};
 
 #ifdef HAS_MOUSE_KEYS
 
-		mouse_keys {
+		mouse_keys {  //6
 			display-name = "Mouse Keys";
 			bindings = <
 														&none          &mmv MOVE_UP    &msc SCRL_UP    &none                 /* | */        &none            &msc SCRL_UP     &mmv MOVE_UP      &none
@@ -222,7 +274,7 @@
 
 		// Automatically activated when the mouse or trackpoint moves.
 		// Configured in `include/mouse_tp.dtsi`.
-					auto_tp_layer {
+					auto_tp_layer { //7
 					display-name = "Auto TP Layer";
 					bindings = <
 			        							&trans        &trans          &msc SCRL_UP    &trans                 /* | */        &trans           &trans         	&trans 			      &trans
@@ -234,7 +286,7 @@
 		};
 
 		// You can find the defines for the actual key press behaviors in `include/mouse_tp.dtsi`.
-					trackpoint_settings {
+					trackpoint_settings { //8
 					display-name = "TP Settings";
 					bindings = <  /*  max speed     sensitivity     tap sensitivity  negative inertia      */
 			                      U_MSS_TP_V6_I	U_MSS_TP_S_I    U_MSS_TP_PT_I    U_MSS_TP_NI_I	       /* | */        &none            &none            &none             U_TOG_TP_SET
