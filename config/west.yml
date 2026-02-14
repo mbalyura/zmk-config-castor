@@ -14,8 +14,8 @@ manifest:
       # remote: infused-kim
       # revision: pr-testing/mouse_ps2_module_base
       remote: zmkfirmware
-      revision: v0.2
-      # revision: v0.3
+      # revision: v0.2
+      revision: v0.3
       import: app/west.yml
     # Module for PS/2 mouse & TP driver
     # - name: kb_zmk_ps2_mouse_trackpoint_driver
@@ -24,8 +24,8 @@ manifest:
     - name: kb_zmk_ps2_mouse_trackpoint_driver
       remote: badjeff
       revision: main
-    # - name: zmk-tri-state
-    #   remote: dhruvinsh
-    #   revision: main
+    - name: zmk-tri-state
+      remote: dhruvinsh
+      revision: main
   self:
     path: config

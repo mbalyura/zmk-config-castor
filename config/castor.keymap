@@ -68,7 +68,7 @@
 		compatible = "zmk,conditional-layers";
 
 		sys_layer {
-			if-layers = <NAV SYM>;
+			if-layers = <NAV NUM>;
 			then-layer = <SYS>;
 		};
 	};
@@ -82,10 +82,17 @@
 			bindings = <&kp BACKSPACE>;
 			key-positions = <0 1>;
 		};
-
 		cmb_del {
 			bindings = <&kp DELETE>;
 			key-positions = <1 2>;
+		};
+		cmb_caps {
+			bindings = <&caps_word>;
+			key-positions = <27 29>;
+		};
+		cmb_lang {
+			bindings = <&kp SCROLLLOCK>;
+			key-positions = <5 7>;
 		};
 	};
 
@@ -123,20 +130,24 @@
 			hold-trigger-key-positions = <LEFT_KEYS LEFT_THUMBS>;// List of keys on the left side of the keyboard
 			hold-trigger-on-release;
 		};
-		// swapper: swapper {
-		// 	compatible = "zmk,behavior-tri-state";
-		// 	label = "SWAPPER";
-		// 	#binding-cells = <0>;
-		// 	bindings = <&kt LALT>, <&kp TAB>, <&kt LALT>;
-		// 	ignored-key-positions = <7 13 16 17 18>;
-		// };
-		// tabber: tabber {
-		// 	compatible = "zmk,behavior-tri-state";
-		// 	label = "TABBER";
-		// 	#binding-cells = <0>;
-		// 	bindings = <&kt LCTRL>, <&kp TAB>, <&kt LCTRL>;
-		// 	ignored-key-positions = <13>;
-		// };
+
+		// one hand alt-tab / ctrl-tab
+		swapper: swapper {
+			compatible = "zmk,behavior-tri-state";
+			label = "SWAPPER";
+			#binding-cells = <0>;
+			bindings = <&kt LALT>, <&kp TAB>, <&kt LALT>;
+			ignored-key-positions = <12>; // shift
+		};
+		tabber: tabber {
+			compatible = "zmk,behavior-tri-state";
+			label = "TABBER";
+			#binding-cells = <0>;
+			bindings = <&kt LCTRL>, <&kp TAB>, <&kt LCTRL>;
+			ignored-key-positions = <12>; // shift
+		};
+
+		//mouse scroll
 		scroll_encoder: scroll_encoder {
 			compatible = "zmk,behavior-sensor-rotate";
 			#sensor-binding-cells = <0>;
@@ -151,18 +162,18 @@
           bindings = <
                               &kp W        &kp F            &kp P              &kp G             /* | */        &kp J          &kp L              &kp U            &kp Y
 &kp Q          &hml LGUI A    &hml LALT R  &hml LCTRL S     &hml LSHIFT T      &kp D             /* | */        &kp H          &hmr LSHIFT N      &hmr LCTRL E     &hmr LALT I       &hmr LGUI O         &kp SEMI
-&kp LBKT       &kp Z          &kp X        &kp C            &kp V              &kp B             /* | */        &kp K          &kp M              &kp COMMA        &kp DOT           &kp SLASH           &mt RALT SQT
+&kp LBKT       &kp Z          &kp X        &kp C            &kp V              &kp B             /* | */        &kp K          &kp M              &kp COMMA        &kp DOT           &kp SLASH           &kp SQT
                                           /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-                                           &kp BSPC         &lt NAV ESC        &lt NAV SPACE     /* | */        &lt NUM TAB    &lt SYM ENTER      &kp DEL
+                                           &kp BSPC         &mt RALT ESC 	     &lt NAV SPACE     /* | */        &lt NUM TAB    &lt SYM ENTER      &kp DEL
             >;
             sensor-bindings = <&scroll_encoder>;
         };
 
           navigation_layer {
           bindings = <
-                              &kp LC(W)     &kp LC(F)        &kp LC(P)          &trans           /* | */        &kp PG_UP      &kp HOME           &kp UP          &kp END
+                              &kp LC(W)     &kp LC(F)        &kp LC(P)          &tabber          /* | */        &kp PG_UP      &kp HOME           &kp UP          &kp END
 &kp LC(Q)      &kp LGUI       &sk LALT      &sk LCTRL        &sk LSHIFT         &kp LC(D)        /* | */        &kp PG_DN      &kp LEFT           &kp DOWN        &kp RIGHT          &kp LC(O)         &kp LC(SEMI)
-&trans         &kp LC(Z)      &kp LC(X)     &ght LS(LC(C)) LC(C) &ght LS(LC(V)) LC(V) &trans     /* | */        &kp LC(K)      &kt LC(M)          &kp K_CONTEXT_MENU &kp LC(PERIOD)  &kp LC(SLASH)     &trans
+&trans         &kp LC(Z)      &kp LC(X)     &ght LS(LC(C)) LC(C) &ght LS(LC(V)) LC(V) &swapper   /* | */        &kp LS(LC(K))  &kt LC(M)          &kp K_CONTEXT_MENU &kp LC(PERIOD)  &kp LC(SLASH)     &trans
                                            /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
                                             &trans           &trans             &trans           /* | */        &trans         &trans             &trans
             >;
@@ -171,22 +182,22 @@
 
           symbols_layer {
           bindings = <
-                            &kp AT        &kp HASH         &kp DOLLAR         &kp PERCENT        /* | */        &kp CARET      &kp AMPERSAND      &kp STAR          &kp LPAR
-&kp EXCL      &kp EQUAL     &kp PLUS      &kp MINUS        &kp UNDER          &kp LBKT           /* | */        &kp RBKT       &sk LSHIFT         &sk LCTRL         &sk LALT          &kp SQT            &kp RPAR
-&trans        &kp PIPE      &kp GRAVE     &caps_word       &kp LPAR           &kp LBRC           /* | */        &kp RBRC       &kp RPAR           &trans            &kp TILDE         &kp BACKSLASH      &trans
-                                          /* - - - - - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-                                          &trans           &trans             &trans             /* | */        &trans         &trans             &trans
+                            &kp AT          &kp HASH         &kp DOLLAR         &kp PERCENT      /* | */        &kp CARET      &kp AMPERSAND      &kp STAR          &kp LPAR
+&kp EXCL      &kp EQUAL     &kp PLUS        &kp MINUS        &kp UNDER          &kp LBKT         /* | */        &kp RBKT       &sk LSHIFT         &sk LCTRL         &sk LALT          &kp SQT            &kp RPAR
+&trans        &kp PIPE      &kp GRAVE       &caps_word       &kp LPAR           &kp LBRC         /* | */        &kp RBRC       &kp RPAR           &trans            &kp TILDE         &kp BACKSLASH      &trans
+                                            /* - - - - - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+                                            &trans           &trans             &trans           /* | */        &trans         &trans             &trans
             >;
             sensor-bindings = <&scroll_encoder>;
         };
 
           numbers-fn_layer {
           bindings = <
-                            &kp F2        &kp F3          &kp F4              &kp F22            /* | */        &kp MINUS      &kp N7            &kp N8            &kp N9
-&kp F1        &kp F5        &kp F6        &kp F7          &kp F8              &kp F23            /* | */        &kp PLUS       &kp N4            &kp N5            &kp N6            &kp N0              &kp STAR
-&trans        &kp F9        &kp F10       &kp F11         &kp F12             &kp F24            /* | */        &kp EQUAL      &kp N1            &kp N2            &kp N3            &kp SLASH           &trans
-                                          /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-                                          &trans           &trans             &trans             /* | */        &trans         &trans            &trans
+                            &kp F2          &kp F3          &kp F4              &kp F22          /* | */        &kp MINUS      &kp N7            &kp N8            &kp N9
+&kp F1        &kp F5        &kp F6          &kp F7          &kp F8              &kp F23          /* | */        &kp PLUS       &kp N4            &kp N5            &kp N6            &kp N0              &kp STAR
+&trans        &kp F9        &kp F10         &kp F11         &kp F12             &kp F24          /* | */        &kp EQUAL      &kp N1            &kp N2            &kp N3            &kp SLASH           &trans
+                                            /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+                                            &trans           &trans             &trans           /* | */        &trans         &trans            &trans
             >;
             sensor-bindings = <&scroll_encoder>;
         };
